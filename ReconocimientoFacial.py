@@ -21,7 +21,7 @@ def gen_frames():  # Generador de fotogramas para la transmisión de video
 
     faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    cap = cv2.VideoCapture(0)
     start_time = datetime.datetime.now()
     while True:
         success, frame = cap.read()

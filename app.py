@@ -8,6 +8,14 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+@app.route('/capturar')
+def capturar():
+    return render_template('capturar.html')
+
+@app.route('/reconocer')
+def reconocer():
+    return render_template('reconocer.html')
+
 @app.route('/video_feed')
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
