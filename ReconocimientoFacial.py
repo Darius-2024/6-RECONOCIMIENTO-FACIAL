@@ -64,6 +64,7 @@ def gen_frames():  # Generador de fotogramas para la transmisión de video
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # Transmite el fotograma como imagen JPEG
 
     cap.release()
+    cv2.destroyAllWindows() ## solucionar
 
 def write_to_firestore(data):
     # Configuración de la base de datos de Firebase Realtime
