@@ -2,13 +2,21 @@ import cv2
 import os
 import numpy as np
 from keras.models import load_model
+import conexion
 
-dataPath = 'G:/IA/OmesTutorials2020-master/6 RECONOCIMIENTO FACIAL/Rostros' 
-peopleList = os.listdir(dataPath)
-print('Lista de personas: ', peopleList)
+# Obtener una referencia al bucket de almacenamiento
+bucket = conexion.initialize_firestore()
+
+# Descargar el modelo desde Firebase Storage
+blob = bucket.blob('modeloCNN.h5')
+blob.download_to_filename('modeloCNN.h5')
 
 # Cargar el modelo entrenado
 model = load_model('modeloCNN.h5')
+
+dataPath = 'G:/IA/OmesTutorials2020-master/6 RECONOCIMIENTO FACIAL/faces' 
+peopleList = os.listdir(dataPath)
+print('Lista de personas: ', peopleList)
 
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 #cap = cv2.VideoCapture('videos/Edson.mp4')
