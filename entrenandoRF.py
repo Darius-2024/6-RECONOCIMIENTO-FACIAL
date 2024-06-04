@@ -3,10 +3,10 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 
-import conexion
+from conexion import initialize_firestore
 
 # Obtener una referencia al bucket de almacenamiento
-bucket = conexion.initialize_firestore()
+bucket = initialize_firestore()
 
 # Definir función para descargar imágenes desde Firebase Storage
 def descargar_imagenes_desde_firebase(folder_name):

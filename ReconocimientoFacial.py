@@ -1,27 +1,26 @@
-from flask import Flask, render_template, Response
+
 import cv2
 import numpy as np
 from keras.models import load_model
 import datetime
 import requests
 import os
-import conexion
-
-app = Flask(__name__)
-
-# Función de inicialización de Firebase
-bucket = conexion.initialize_firestore()
-
-# Cargar el modelo entrenado
-model = load_model('modeloCNN.h5')
-
-dataPath = os.path.join(os.getcwd(),"faces") 
-peopleList = os.listdir(dataPath)
-print('Lista de personas: ', peopleList)
-
-faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+from conexion import initialize_firestore
 
 def gen_frames():  # Generador de fotogramas para la transmisión de video
+    # Función de inicialización de Firebase
+
+    initialize_firestore()
+
+    # Cargar el modelo entrenado
+    model = load_model('modeloCNN.h5')
+
+    dataPath = os.path.join(os.getcwd(),"faces") 
+    peopleList = os.listdir(dataPath)
+    print('Lista de personas: ', peopleList)
+
+    faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     start_time = datetime.datetime.now()
     while True:
@@ -66,12 +65,11 @@ def gen_frames():  # Generador de fotogramas para la transmisión de video
 
     cap.release()
 
-# Configuración de la base de datos de Firebase Realtime
-BasePath = "https://deteccionfacial-3746c-default-rtdb.firebaseio.com/"
-AuthSecret = "ezT2u0M4G8nDKEcNIb3Hmtg3qzZhDcoWRXSsWzFj"
-
-
 def write_to_firestore(data):
+    # Configuración de la base de datos de Firebase Realtime
+    BasePath = "https://deteccionfacial-3746c-default-rtdb.firebaseio.com/"
+    AuthSecret = "ezT2u0M4G8nDKEcNIb3Hmtg3qzZhDcoWRXSsWzFj"
+
     endpoint = BasePath + "reconocimientos.json?auth=" + AuthSecret
     response = requests.post(endpoint, json=data)
     if response.status_code == 200:
@@ -79,13 +77,4 @@ def write_to_firestore(data):
     else:
         print("Error al escribir datos en la base de datos:", response.text)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
 
-@app.route('/video_feed')
-def video_feed():
-    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-if __name__ == "__main__":
-    app.run(debug=True)

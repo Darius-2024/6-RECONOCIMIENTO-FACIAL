@@ -1,7 +1,7 @@
 import cv2
 import os
 import imutils
-import conexion
+from conexion import initialize_firestore
 
 photos = 10
 personName = 'Daniel'
@@ -19,7 +19,7 @@ faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontal
 count = 0
 
 # Bucket de Firebase
-bucket = conexion.initialize_firestore()
+bucket = initialize_firestore()
 
 while True:
     ret, frame = cap.read()
