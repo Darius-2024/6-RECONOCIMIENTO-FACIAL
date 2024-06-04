@@ -15,7 +15,7 @@ bucket = conexion.initialize_firestore()
 # Cargar el modelo entrenado
 model = load_model('modeloCNN.h5')
 
-dataPath = 'G:/IA/OmesTutorials2020-master/6 RECONOCIMIENTO FACIAL/faces' 
+dataPath = os.path.join(os.getcwd(),"faces") 
 peopleList = os.listdir(dataPath)
 print('Lista de personas: ', peopleList)
 

@@ -5,7 +5,7 @@ import conexion
 
 photos = 10
 personName = 'Daniel'
-dataPath = 'G:/IA/OmesTutorials2020-master/6 RECONOCIMIENTO FACIAL/faces' # Cambia a la ruta donde hayas almacenado Data
+dataPath = os.path.join(os.getcwd(),"faces") # Ruta donde hayas almacenado Data
 personPath = dataPath + '/' + personName
 
 if not os.path.exists(personPath):
