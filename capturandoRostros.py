@@ -1,12 +1,12 @@
 import cv2
 import os
 import imutils
-from conexion import initialize_firestore
+from conexion import initialize_firebase_admin, storage
 
 photos = 10
-personName = 'Daniel'
+document = '9983094'
 dataPath = os.path.join(os.getcwd(),"faces") # Ruta donde hayas almacenado Data
-personPath = dataPath + '/' + personName
+personPath = dataPath + '/' + document
 
 if not os.path.exists(personPath):
     print('Carpeta creada: ', personPath)
@@ -19,7 +19,8 @@ faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontal
 count = 0
 
 # Bucket de Firebase
-bucket = initialize_firestore()
+initialize_firebase_admin()
+bucket = storage.bucket()
 
 while True:
     ret, frame = cap.read()
@@ -38,7 +39,7 @@ while True:
         cv2.imwrite(personPath + '/rostro_{}.jpg'.format(count), rostro)
 
         # Subir la imagen a Firebase Storage
-        blob = bucket.blob('images/{}/rostro_{}.jpg'.format(personName, count))
+        blob = bucket.blob('faces/{}/rostro_{}.jpg'.format(document, count))
         blob.upload_from_filename(filename=personPath + '/rostro_{}.jpg'.format(count))
         count = count + 1
     cv2.imshow('frame', frame)

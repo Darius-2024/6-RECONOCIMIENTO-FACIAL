@@ -1,6 +1,7 @@
 
-from flask import Flask, render_template, Response
-from ReconocimientoFacial import gen_frames
+from flask import Flask, render_template, Response, jsonify
+from reconocimientoFacial import gen_frames
+
 
 app = Flask(__name__)
 
