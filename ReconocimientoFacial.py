@@ -65,7 +65,7 @@ def gen_frames():
 
     faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    cap = cv2.VideoCapture('videos/Edson.mp4')
     start_time = datetime.datetime.now()
     
     while True:

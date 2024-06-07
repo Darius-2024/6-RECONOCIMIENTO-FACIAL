@@ -58,7 +58,7 @@ def save_model_to_firebase(model, bucket, filename):
     print("Modelo almacenado en Firebase Storage...")
 
 # Ejecutar todo el proceso
-def run():
+def run_entrenamiento():
     bucket = initialize_firebase()
     images = []
     labels = []
@@ -73,6 +73,4 @@ def run():
     trained_model = train_model(model, images, labels)
     save_model_to_firebase(trained_model, bucket, 'models/modeloCNN.h5')
 
-# Ejecutar el proceso
-if __name__ == "__main__":
-    run()
+    cv2.destroyAllWindows()

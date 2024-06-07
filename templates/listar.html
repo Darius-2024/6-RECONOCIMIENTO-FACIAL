@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Personas Reconocidas</title>
+    <!-- Agregar referencia a Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Estilo adicional para el cuerpo */
+        body {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+<body class="bg-dark">
+    <div class="container bg-white">
+        <a href="../" class="btn btn-primary">Volver</a>
+        <h1 class="text-center">Lista de Personas Reconocidas</h1>
+
+        <div class="form-group">
+            <label for="filtro-personas">Filtrar por Persona:</label>
+            <select id="filtro-personas" class="form-control" onchange="filtrarTabla()">
+                <option value="">Todas las Personas</option>
+                <!-- Las opciones de persona se generarán dinámicamente usando JavaScript -->
+            </select>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped" id="tabla-personas">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Persona</th>
+                        <th>Fecha y Hora</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-personas">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Agregar referencia a Bootstrap JS (opcional, solo si se usan componentes JS de Bootstrap) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Cargar la tabla al cargar la página
+        document.addEventListener('DOMContentLoaded', cargarTablaPersonas);
+
+        // Función para cargar la tabla de personas
+        function cargarTablaPersonas() {
+            fetch('/obtener_reconocidas')
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Error en la solicitud.');
+                })
+                .then(data => {
+                    const personasSelect = document.getElementById('filtro-personas');
+                    const tbodyPersonas = document.getElementById('tbody-personas');
+                    tbodyPersonas.innerHTML = ''; // Limpiar tabla antes de actualizar
+                    Object.keys(data).forEach(key => {
+                        const personaData = data[key];
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${personaData.persona}</td>
+                            <td>${personaData.fecha_hora}</td>
+                        `;
+                        tbodyPersonas.appendChild(row);
+
+                        // Agregar opciones de persona al select
+                        if (!personasSelect.querySelector(`option[value="${personaData.persona}"]`)) {
+                            const option = document.createElement('option');
+                            option.value = personaData.persona;
+                            option.textContent = personaData.persona;
+                            personasSelect.appendChild(option);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Función para filtrar la tabla según la persona seleccionada
+        function filtrarTabla() {
+            const personaSeleccionada = document.getElementById('filtro-personas').value;
+            const filasTabla = document.querySelectorAll('#tbody-personas tr');
+            filasTabla.forEach(row => {
+                const personaEnFila = row.querySelector('td:first-child').textContent;
+                row.style.display = (personaSeleccionada === '' || personaEnFila === personaSeleccionada) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

@@ -9,3 +9,9 @@ def registra_persona_reconocida(data):
         'fecha_hora': data['fecha_hora']
     })
     print("Persona agregada a la base de datos")
+
+def obtener_personas_reconocidas():
+    initialize_firebase_admin()
+    ref = db.reference('reconocimientos')
+    personas = ref.get()
+    return personas
