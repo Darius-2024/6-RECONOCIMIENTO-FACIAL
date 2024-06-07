@@ -16,7 +16,7 @@ def capture_faces(document, frame, count):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     auxFrame = frame.copy()
 
-    faces = faceClassif.detectMultiScale(gray, 1.3, 5)
+    faces = faceClassif.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(30, 30))
     initialize_firebase_admin()
     bucket = storage.bucket()
 
