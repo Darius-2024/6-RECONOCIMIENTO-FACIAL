@@ -32,6 +32,9 @@
                     <tr>
                         <th>Persona</th>
                         <th>Fecha y Hora</th>
+                        <th>Direccion</th>
+                        <th>Latitud</th>
+                        <th>Longitud</th>
                     </tr>
                 </thead>
                 <tbody id="tbody-personas">
@@ -66,6 +69,9 @@
                         row.innerHTML = `
                             <td>${personaData.persona}</td>
                             <td>${personaData.fecha_hora}</td>
+                            <td>${personaData.direccion}</td>
+                            <td>${personaData.latitud}</td>
+                            <td>${personaData.longitud}</td>
                         `;
                         tbodyPersonas.appendChild(row);
 
