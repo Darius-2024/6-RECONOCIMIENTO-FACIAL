@@ -63,6 +63,13 @@
             var nrofotos = document.getElementById('nrofotos').value;
             var videoStream = document.getElementById('videoStream');
 
+            // Verificar que los campos documento y nrofotos estén completados
+            if (documento.trim() === '' || nrofotos.trim() === '') {
+                alert('Por favor, completa todos los campos.');
+                return;
+            }
+
+            
             // Generar la URL con los parámetros
             var url = "/video_feed_captura?documento=" + encodeURIComponent(documento) + "&nrofotos=" + encodeURIComponent(nrofotos);
             

@@ -1,6 +1,5 @@
 import cv2
 import os
-import imutils
 from conexion import initialize_firebase_admin, storage
 
 def create_folder(folder_path):

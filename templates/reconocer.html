@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 </head>
 <body class="container bg-dark">
     <div class="container">
@@ -22,7 +21,8 @@
                                     <h5 class="card-title text-center pb-0 fs-4">Reconocimiento Facial en Tiempo Real</h5>
                                 </div>
                                 <div class="row g-3 needs-validation">
-                                    <img src="{{ url_for('video_feed') }}" width="640" height="480" alt="Video en tiempo real">
+                                    <img id="videoStream" src="" width="640" height="480" alt="Video en tiempo real" style="display: none; margin-top:20px;">
+                                    <div id="locationData"></div>
                                 </div>
                             </div>
                         </div>
@@ -30,7 +30,6 @@
                 </div>
             </div>
         </section>
-
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -41,5 +40,40 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+
+
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var latitud = position.coords.latitude;
+                    var longitud = position.coords.longitude;
+
+                    var locationData = document.getElementById('locationData');
+                    locationData.innerHTML = "Latitud: " + latitud + "<br>Longitud: " + longitud;
+
+
+                    var videoStream = document.getElementById('videoStream');
+                    var url = "/video_feed?latitud=" + encodeURIComponent(latitud) + "&longitud=" + encodeURIComponent(longitud);
+
+                    // Actualizar la fuente del <img> y mostrar el video
+                    videoStream.src = url;
+                    videoStream.style.display = 'block';
+
+                }, function(error) {
+                    console.error("Error al obtener la ubicación:", error);
+                    var locationData = document.getElementById('locationData');
+                    locationData.innerHTML = "Error al obtener la ubicación.";
+                });
+            } else {
+                var locationData = document.getElementById('locationData');
+                locationData.innerHTML = "Geolocalización no es soportada por este navegador.";
+            }
+        });
+        </script>
+        
+
+        
+        
 </body>
 </html>

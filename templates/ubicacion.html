@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obtener Latitud y Longitud</title>
+</head>
+<body>
+    <div id="locationData"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var latitud = position.coords.latitude;
+                    var longitud = position.coords.longitude;
+
+                    var locationData = document.getElementById('locationData');
+                    locationData.innerHTML = "Latitud: " + latitud + "<br>Longitud: " + longitud;
+                }, function(error) {
+                    console.error("Error al obtener la ubicación:", error);
+                    var locationData = document.getElementById('locationData');
+                    locationData.innerHTML = "Error al obtener la ubicación.";
+                });
+            } else {
+                var locationData = document.getElementById('locationData');
+                locationData.innerHTML = "Geolocalización no es soportada por este navegador.";
+            }
+        });
+    </script>
+</body>
+</html>

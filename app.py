@@ -1,10 +1,12 @@
 from flask import Flask, render_template, Response, jsonify, request
+from flask_sslify import SSLify
 from reconocimientoFacial import gen_frames
 from capturandoRostros import gen_frames_capture
 from entrenandoRF import run_entrenamiento
 from datos import obtener_personas_reconocidas
 
 app = Flask(__name__)
+sslify = SSLify(app)
 
 @app.route('/')
 def index():
@@ -29,7 +31,9 @@ def obtener_reconocidas():
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    latitud = request.args.get('latitud')
+    longitud = request.args.get('longitud')
+    return Response(gen_frames(latitud, longitud), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/video_feed_captura')
 def video_feed_captura():
@@ -42,4 +46,4 @@ def entrenamiento():
     return Response(run_entrenamiento(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8081, host="0.0.0.0")
+    app.run(debug=True, port=8081, host="0.0.0.0", ssl_context='adhoc')

@@ -18,7 +18,7 @@ def initialize_model():
     model = load_model('models/modeloCNN.h5')
     return model
 
-def detect_faces(frame, faceClassif, model, peopleList, start_time):
+def detect_faces(frame, faceClassif, model, peopleList, start_time, latitud, longitud):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = faceClassif.detectMultiScale(gray, 1.3, 5)
     for (x, y, w, h) in faces:
@@ -42,7 +42,9 @@ def detect_faces(frame, faceClassif, model, peopleList, start_time):
             if fecha_hora_actual - start_time >= datetime.timedelta(seconds=5):
                 data = {
                     "persona": persona,
-                    "fecha_hora": fecha_hora_actual.strftime("%Y-%m-%d %H:%M:%S")  # Guardar fecha y hora combinadas
+                    "fecha_hora": fecha_hora_actual.strftime("%Y-%m-%d %H:%M:%S"),  # Guardar fecha y hora combinadas
+                    "latitud" : latitud,
+                    "longitud" : longitud
                 }
                 registra_persona_reconocida(data)
                 start_time = fecha_hora_actual
@@ -54,7 +56,7 @@ def detect_faces(frame, faceClassif, model, peopleList, start_time):
     frame = buffer.tobytes()
     return frame, start_time
 
-def gen_frames():
+def gen_frames(latitud, longitud):
     # Inicializar el modelo
     model = initialize_model()
 
@@ -65,7 +67,7 @@ def gen_frames():
 
     faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-    cap = cv2.VideoCapture('videos/Edson.mp4')
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     start_time = datetime.datetime.now()
     
     while True:
@@ -73,7 +75,7 @@ def gen_frames():
         if not success:
             break
         else:
-            frame, start_time = detect_faces(frame, faceClassif, model, peopleList, start_time)
+            frame, start_time = detect_faces(frame, faceClassif, model, peopleList, start_time, latitud, longitud)
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # Transmite el fotograma como imagen JPEG
 
